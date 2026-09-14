@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Park · 数字公共物品商店</title>
+<meta name="description" content="一次 ¥9.9 铸造会员 SBT，无限下载店内任何数字公共物品；算力按量计费或 BYOK 自带密钥。全部公共物品 Apache 2.0 开源。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/park.css">
+</head>
+<body>
+<header>
+  <div class="wrap hrow">
+    <a class="logo" href="index.html">🌱 Park</a>
+    <nav class="nav">
+      <a href="index.html">首页</a>
+      <a href="public-goods.html">公共物品</a>
+      <a href="store.html">商店</a>
+      <a href="membership.html">会员与凭证</a>
+    </nav>
+    <div class="spacer"></div>
+    <span class="badge" id="badge"><span class="dot"></span><span id="badgeText">非会员</span></span>
+  </div>
+</header>
+<div class="wrap hero">
+  <span class="kicker">Digital Public Goods Store</span>
+  <h1>一次 <em>¥9.9</em>，下载这座公园里的<br>每一件数字公共物品</h1>
+  <p class="lead">所有公共物品都是 Apache 2.0 开源的——你随时可以从源码自行构建，<b>我们不会、也拦不住你这么做</b>。铸造会员 SBT，买到的不是「能不能拿到代码」，而是经过签名验证的构建、一键安装与自动更新、社区网络接入权，以及治理与分润权。</p>
+  <div class="cta">
+    <a class="btn primary" href="store.html">¥9.9 铸造会员 SBT</a>
+    <a class="btn ghost" href="public-goods.html">先看看有什么</a>
+    <span class="note"><s>$19 / 月</s>一次买断 · 终身有效 · 不含算力</span>
+  </div>
+
+  <div class="membercard">
+    <div class="sbt locked" id="sbtCard">
+      <div class="t">PARK MEMBER</div>
+      <div class="id" id="sbtId">尚未铸造</div>
+    </div>
+    <div class="membermeta">
+      <h3 id="mmTitle">你还不是会员</h3>
+      <p id="mmDesc">铸造 SBT 后，店内全部 <b id="goodCount">12</b> 件数字公共物品即刻解锁，可无限次下载。</p>
+    </div>
+    <a class="btn primary" href="store.html" id="mmBtn">立即铸造</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>三条服务通道</h2></div>
+    <p class="sdesc">商店的两半遵循两种经济学：<b>下载</b>的边际成本≈0，所以免费无限；<b>算力</b>的边际成本&gt;0，所以按量计费——或者你自己带钥匙。</p>
+    <div class="lanes">
+      <div class="lane">
+        <div class="tag">通道 01</div>
+        <h4>下载 <span class="free">免费无限</span></h4>
+        <p style="font-size:13.5px;color:var(--muted)">会员权益，不需要任何额外付费。多一个人下载，我们多花的钱是零。</p>
+        <ul>
+          <li>店内全部公共物品</li>
+          <li>签名验证过的构建产物</li>
+          <li>自动更新通道</li>
+          <li>不限次数、不限数量</li>
+        </ul>
+      </div>
+      <div class="lane hi">
+        <div class="tag">通道 02 · 推荐</div>
+        <h4>BYOK <span class="free">免费</span></h4>
+        <p style="font-size:13.5px;color:var(--muted)">自带密钥。你付给你自己的模型供应商，Park 一分不赚。</p>
+        <ul>
+          <li>填入你自己的 API Key</li>
+          <li>支持本地 Ollama / vLLM</li>
+          <li>密钥只存本地，永不上传</li>
+          <li>边际成本 = 0 → 终身免费成立</li>
+        </ul>
+      </div>
+      <div class="lane">
+        <div class="tag">通道 03</div>
+        <h4>社区 API <span class="paid">按量计费</span></h4>
+        <p style="font-size:13.5px;color:var(--muted)">社区节点提供算力，你按实际用量付费，收益归节点。</p>
+        <ul>
+          <li>无需自备密钥</li>
+          <li>按 token / 秒计量</li>
+          <li>跨节点发现与路由</li>
+          <li>用多少付多少，无订阅</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>精选公共物品</h2><span class="pill" id="storePill">全部锁定</span></div>
+    <p class="sdesc">每一件都是公共物品：边际成本≈0，所以会员下载不限量、不计数、不扣费。</p>
+    <div class="grid" id="goodsGrid"></div>
+    <p style="margin-top:22px"><a class="btn ghost" href="public-goods.html">查看全部 12 件 →</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>为什么「无限下载」不怕被薅</h2></div>
+    <div class="prose">
+      <p>因为下载的东西<b>本来就是开源的</b>。这是这个模式最重要的一条性质，它让所有关于盗版的焦虑自动消失。</p>
+      <div class="tablewrap">
+      <table>
+        <thead><tr><th>常见担忧</th><th>实际情况</th></tr></thead>
+        <tbody>
+          <tr><td>有人 mint 一次然后倒卖下载？</td><td>倒卖<b>已经免费的东西</b>没有意义</td></tr>
+          <tr><td>有人绕开 SBT 直接拿代码？</td><td>✅ <b>欢迎</b>——从 GitHub 直接 clone 即可，这正是 Apache 2.0 的承诺</td></tr>
+          <tr><td>那 SBT 门禁在做什么？</td><td>门禁的不是<b>内容</b>，是<b>会员身份 + 便利性 + 网络接入</b></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="callout green" style="margin-top:22px">
+        <b>所以这里没有 DRM，也永远不会有。</b><br>
+        会员费买的不是「能不能拿到代码」，而是拿到之后能不能顺畅地用、能不能接入网络、能不能分到钱。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>社区 API 节点</h2><span class="pill warn">按量计费</span></div>
+    <p class="sdesc">这些节点由社区成员自行运行。Park 只提供身份、发现、计量与结算，算力收益归节点。</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>节点</th><th>模型</th><th>价格</th><th>延迟</th><th>状态</th></tr></thead>
+      <tbody id="nodeRows"></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<script src="assets/goods-data.js"></script>
+<script src="assets/park.js"></script>
+<script>
+(function () {
+  var G = window.PARK_GOODS, N = window.PARK_NODES;
+  var member = Park.isMember();
+
+  document.getElementById('goodCount').textContent = G.length;
+
+  // 会员卡状态
+  if (member) {
+    document.getElementById('sbtCard').className = 'sbt';
+    document.getElementById('sbtId').textContent = member.id;
+    document.getElementById('mmTitle').textContent = '会员已激活 · 终身有效';
+    document.getElementById('mmDesc').innerHTML = '全部 <b>' + G.length + '</b> 件数字公共物品已解锁。4 个硬件席位已就绪。';
+    document.getElementById('mmBtn').textContent = '查看我的席位';
+    document.getElementById('mmBtn').setAttribute('href', 'membership.html');
+  }
+
+  // 精选：取前 8 件
+  var grid = document.getElementById('goodsGrid');
+  G.slice(0, 8).forEach(function (g) {
+    var c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML =
+      '<div class="ico">' + g.ico + '</div>' +
+      '<h4>' + g.name + '</h4>' +
+      '<p>' + g.desc + '</p>' +
+      '<div class="meta"><span>' + g.ver + '</span><span>' + g.size + '</span><span>↓ ' + g.dl + '</span></div>' +
+      '<div class="cardfoot">' +
+        (member
+          ? '<button class="btn primary sm" data-dl="' + g.name + '">下载</button><span class="tagline">已解锁</span>'
+          : '<span class="lockmsg">🔒 需会员</span><a class="tagline" href="store.html">去铸造 →</a>') +
+      '</div>';
+    grid.appendChild(c);
+  });
+
+  document.getElementById('storePill').textContent = member ? '全部解锁' : '全部锁定';
+  document.getElementById('storePill').className = member ? 'pill' : 'pill lock';
+
+  Array.prototype.forEach.call(grid.querySelectorAll('[data-dl]'), function (b) {
+    b.addEventListener('click', function () {
+      Park.toast('已开始下载：' + b.getAttribute('data-dl') + '（会员免费，不计数）');
+    });
+  });
+
+  // 节点表
+  var tb = document.getElementById('nodeRows');
+  N.forEach(function (n) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="m">' + n.node + '</td><td>' + n.model + '</td><td class="m">' + n.price + '</td>' +
+      '<td class="m">' + n.lat + '</td>' +
+      '<td>' + (n.ok ? '<span class="pill">在线</span>' : '<span class="pill warn">离线</span>') + '</td>';
+    tb.appendChild(tr);
+  });
+})();
+</script>
+<footer>
+  <div class="wrap">
+    <p><b>Park</b> · Park 数字公共物品商店 · 设计文档见 <a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden">MushroomDAO/Park-PublicGoodsGarden</a></p>
+    <p style="margin-top:9px;color:var(--faint)">下载不限量（边际成本≈0）· 算力按量计费（边际成本&gt;0）· BYOK 让终身免费成立 · 不设 DRM，因为内容本就开源。</p>
+  </div>
+</footer>
+<div id="toast"></div>
+</body>
+</html>

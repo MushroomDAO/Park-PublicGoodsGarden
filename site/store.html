@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>商店 · Park</title>
+<meta name="description" content="铸造 Park 会员 SBT（¥9.9 一次性），解锁店内全部数字公共物品。可点击的概念演示。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/park.css">
+</head>
+<body>
+<header>
+  <div class="wrap hrow">
+    <a class="logo" href="index.html">🌱 Park</a>
+    <nav class="nav">
+      <a href="index.html">首页</a>
+      <a href="public-goods.html">公共物品</a>
+      <a href="store.html">商店</a>
+      <a href="membership.html">会员与凭证</a>
+    </nav>
+    <div class="spacer"></div>
+    <span class="badge" id="badge"><span class="dot"></span><span id="badgeText">非会员</span></span>
+  </div>
+</header>
+<div class="wrap hero" style="padding-bottom:30px">
+  <span class="kicker">Store · 交互演示</span>
+  <h1 style="font-size:clamp(26px,4vw,40px)">铸造会员 SBT，解锁全部公共物品</h1>
+  <p class="lead">这是一份可点击的概念演示：走完铸造流程后，店内全部物品即刻解锁。演示状态保存在你的浏览器本地。</p>
+</div>
+
+<div class="wrap" style="padding-bottom:26px">
+  <div class="membercard" style="margin-top:0">
+    <div class="sbt locked" id="sbtCard">
+      <div class="t">PARK MEMBER</div>
+      <div class="id" id="sbtId">尚未铸造</div>
+    </div>
+    <div class="membermeta">
+      <h3 id="mmTitle">你还不是会员</h3>
+      <p id="mmDesc">铸造后解锁全部公共物品，并获得 4 个硬件席位与社区网络接入权。</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn primary" id="mintBtn">¥9.9 铸造</button>
+      <button class="btn ghost" id="resetBtn" style="display:none">重置演示</button>
+    </div>
+  </div>
+</div>
+
+<section style="border-top:none;padding-top:12px">
+  <div class="wrap">
+    <div class="shead"><h2>商店</h2><span class="pill lock" id="storePill">全部锁定</span></div>
+    <div class="grid" id="goodsGrid"></div>
+  </div>
+</section>
+
+<div id="modal">
+  <div class="sheet" id="sheet">
+    <h3>铸造 Park 会员 SBT</h3>
+    <p style="font-size:13.5px;color:var(--muted)">一次性买断，终身有效</p>
+    <div class="amt">¥9.9 <small>/ 一次性</small></div>
+    <div class="terms">
+      <div>无限下载店内全部数字公共物品</div>
+      <div>4 个硬件席位（可撤销与重绑）</div>
+      <div>社区 API 网络接入权</div>
+      <div>治理投票与仲裁权</div>
+      <div>BYOK 使用权</div>
+    </div>
+    <div style="font-size:12.5px;color:var(--muted);margin-bottom:18px">不含持续算力消耗。算力可自带密钥（免费）或使用社区 API（按量付费）。</div>
+    <div style="display:flex;gap:11px">
+      <button class="btn" id="cancelPay" style="flex:1">取消</button>
+      <button class="btn primary" id="confirmPay" style="flex:2">支付 ¥9.9</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/goods-data.js"></script>
+<script src="assets/park.js"></script>
+<script>
+(function () {
+  var G = window.PARK_GOODS;
+  var SHEET_HTML = document.getElementById('sheet').innerHTML;
+
+  function render() {
+    var m = Park.isMember();
+    var card = document.getElementById('sbtCard');
+    var pill = document.getElementById('storePill');
+
+    card.className = m ? 'sbt' : 'sbt locked';
+    document.getElementById('sbtId').textContent = m ? m.id : '尚未铸造';
+    document.getElementById('mmTitle').textContent = m ? '会员已激活 · 终身有效' : '你还不是会员';
+    document.getElementById('mmDesc').innerHTML = m
+      ? '全部 <b>' + G.length + '</b> 件数字公共物品已解锁，可无限次下载。4 个硬件席位已就绪。'
+      : '铸造后解锁全部公共物品，并获得 4 个硬件席位与社区网络接入权。';
+    document.getElementById('mintBtn').style.display = m ? 'none' : '';
+    document.getElementById('resetBtn').style.display = m ? '' : 'none';
+    pill.textContent = m ? '全部解锁' : '全部锁定';
+    pill.className = m ? 'pill' : 'pill lock';
+
+    var grid = document.getElementById('goodsGrid');
+    grid.innerHTML = '';
+    G.forEach(function (g) {
+      var c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML =
+        '<div class="ico">' + g.ico + '</div>' +
+        '<h4>' + g.name + '</h4>' +
+        '<p>' + g.desc + '</p>' +
+        '<div class="meta"><span>' + g.ver + '</span><span>' + g.size + '</span><span>↓ ' + g.dl + '</span></div>' +
+        '<div class="cardfoot">' +
+          (m
+            ? '<button class="btn primary sm" data-dl="' + g.name + '">下载</button><span class="tagline">已解锁</span>'
+            : '<span class="lockmsg">🔒 需会员</span>') +
+        '</div>';
+      grid.appendChild(c);
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll('[data-dl]'), function (b) {
+      b.addEventListener('click', function () {
+        Park.toast('已开始下载：' + b.getAttribute('data-dl') + '（会员免费，不计数）');
+      });
+    });
+    Park.paintBadge();
+  }
+
+  function openModal() { document.getElementById('modal').classList.add('show'); }
+  function closeModal() { document.getElementById('modal').classList.remove('show'); }
+  function bindModal() {
+    document.getElementById('cancelPay').addEventListener('click', closeModal);
+    document.getElementById('confirmPay').addEventListener('click', mint);
+  }
+
+  function mint() {
+    var sheet = document.getElementById('sheet');
+    sheet.innerHTML = '<h3>正在铸造…</h3><div class="spin"></div>' +
+      '<p style="font-size:13.5px;color:var(--muted);margin-top:12px">支付已确认 · 正在写入 SBT</p>';
+    setTimeout(function () {
+      Park.mint();
+      closeModal();
+      sheet.innerHTML = SHEET_HTML;   // restore so the demo can be replayed
+      bindModal();
+      render();
+      Park.toast('🎉 会员 SBT 铸造成功 · 全部公共物品已解锁');
+    }, 1500);
+  }
+
+  document.getElementById('mintBtn').addEventListener('click', openModal);
+  document.getElementById('resetBtn').addEventListener('click', function () {
+    Park.reset(); render(); Park.toast('演示已重置');
+  });
+  bindModal();
+  render();
+})();
+</script>
+<footer>
+  <div class="wrap">
+    <p><b>Park</b> · Park 数字公共物品商店 · 设计文档见 <a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden">MushroomDAO/Park-PublicGoodsGarden</a></p>
+    <p style="margin-top:9px;color:var(--faint)">下载不限量（边际成本≈0）· 算力按量计费（边际成本&gt;0）· BYOK 让终身免费成立 · 不设 DRM，因为内容本就开源。</p>
+  </div>
+</footer>
+<div id="toast"></div>
+</body>
+</html>

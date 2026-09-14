@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>会员与凭证 · Park</title>
+<meta name="description" content="Park 会员 SBT 的权益、4 个硬件席位、BYOK 自带密钥、社区 API 按量计费，以及为什么这里没有 DRM。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/park.css">
+</head>
+<body>
+<header>
+  <div class="wrap hrow">
+    <a class="logo" href="index.html">🌱 Park</a>
+    <nav class="nav">
+      <a href="index.html">首页</a>
+      <a href="public-goods.html">公共物品</a>
+      <a href="store.html">商店</a>
+      <a href="membership.html">会员与凭证</a>
+    </nav>
+    <div class="spacer"></div>
+    <span class="badge" id="badge"><span class="dot"></span><span id="badgeText">非会员</span></span>
+  </div>
+</header>
+<div class="wrap hero" style="padding-bottom:26px">
+  <span class="kicker">Membership & Credential</span>
+  <h1 style="font-size:clamp(26px,4vw,40px)">会员与凭证</h1>
+  <p class="lead">SBT 是什么、席位怎么绑、算力怎么算钱、以及为什么这里<b>没有 DRM</b>。</p>
+</div>
+
+<section style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="shead"><h2>三条服务通道的账</h2></div>
+    <p class="sdesc">商店的两半遵循两种经济学。这是整个产品能否成立的唯一关键判断。</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>通道</th><th>交付物</th><th>边际成本</th><th>定价</th><th>谁付算力费</th></tr></thead>
+      <tbody>
+        <tr><td><b>① 下载</b></td><td>代码、模型权重、构建产物</td><td class="m">≈ 0</td><td class="m free">免费无限</td><td>无人</td></tr>
+        <tr><td><b>② BYOK</b></td><td>推理结果</td><td class="m">= 0（对你）</td><td class="m free">免费</td><td><b>你自己</b></td></tr>
+        <tr><td><b>③ 社区 API</b></td><td>推理结果</td><td class="m">&gt; 0</td><td class="m paid">按量计费</td><td>你，按实际用量</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout" style="margin-top:24px">
+      <b>BYOK 不是附加功能，它是让「¥9.9 终身」在数学上成立的支点。</b><br>
+      Park 提供算力 → 边际成本 &gt; 0 → 必须计量 → 不可能终身免费。<br>
+      用户自带密钥 → 边际成本 = 0 → 可以终身免费 ✅
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>BYOK · 自带密钥</h2></div>
+    <p class="sdesc">填入你自己的 API Key，或指向本地模型服务。密钥只存在你的浏览器里。</p>
+    <div class="panel">
+      <div class="frow">
+        <select id="provider">
+          <option>OpenAI</option><option>Anthropic</option><option>DeepSeek</option><option>通义千问</option>
+          <option>本地 Ollama (http://localhost:11434)</option><option>本地 vLLM</option>
+        </select>
+        <input type="password" id="apikey" placeholder="sk-...  你的 API Key">
+        <button class="btn primary" id="saveKey">保存到本地</button>
+      </div>
+      <div class="hint">🔒 密钥仅保存在你的浏览器本地存储中，<b>永远不会上传到 Park</b>。这是 BYOK 的全部意义——一旦密钥经过我们的服务器，它就不再是 BYOK 了。</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>我的席位</h2><span class="pill" id="seatPill">0 / 4</span></div>
+    <p class="sdesc">每个席位绑定一台硬件（Secure Enclave / TPM / Keystore 中的不可导出私钥）。席位用于<b>反滥用</b>，不用于限制你使用软件——代码本来就是开源的。</p>
+    <div class="seats" id="seatGrid"></div>
+    <div class="callout green" style="margin-top:22px">
+      <b>在按量计费下，多人共用一个席位不造成收入损失</b>——用得多就付得多。<br>
+      所以席位不是收费闸门，而是反滥用机制：它保护的是<b>不计量的免费额度</b>，不是「使用行为」。
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="shead"><h2>这里为什么没有 DRM</h2></div>
+    <div class="prose">
+      <p>公共物品是 Apache 2.0 的。任何人只要有技术能力，都可以直接拿走代码使用，甚至可以复制我们整套体系——<b>这是对的，而且我们接受</b>。</p>
+      <p>因为复制的成本结构决定了它不可规模化。想复制的人需要自建：</p>
+      <ul>
+        <li>KMS 与密钥管理</li>
+        <li>自动更新管道与签名分发</li>
+        <li>算力与推理（<b>真金白银的边际成本</b>）</li>
+        <li>节点网络与网络效应（<b>无法复制，只能长出来</b>）</li>
+        <li>身份、信誉、争议仲裁</li>
+      </ul>
+      <div class="callout">
+        <b>Park 的护城河是「网络效应 + 更新管道 + 托管服务 + 信任」，不是代码。</b><br>
+        破解者能拿走的是工具，拿不走的是电网。
+      </div>
+      <p style="margin-top:20px"><a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden/blob/main/docs/10_Ticket_Credential_Design.md">设计文档：门票与凭证体系 →</a><br>
+      <a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden/blob/main/docs/11_Digital_Public_Goods_Store.md">设计文档：数字公共物品商店 →</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="assets/goods-data.js"></script>
+<script src="assets/park.js"></script>
+<script>
+(function () {
+  var m = Park.isMember();
+  var g = document.getElementById('seatGrid');
+  document.getElementById('seatPill').textContent = (m ? 1 : 0) + ' / 4';
+  for (var i = 0; i < 4; i++) {
+    var used = m && i === 0;
+    var d = document.createElement('div');
+    d.className = 'seat' + (used ? ' used' : '');
+    d.innerHTML = used
+      ? '<b>本机 · macOS</b><span class="key">Secure Enclave<br>' + m.id + '</span>'
+      : '<b>空席位</b><span style="font-size:12.5px">' + (m ? '可在新设备上绑定' : '铸造会员后可用') + '</span>';
+    g.appendChild(d);
+  }
+
+  document.getElementById('saveKey').addEventListener('click', function () {
+    var k = document.getElementById('apikey').value.trim();
+    if (!k) { Park.toast('请先填入你的 API Key'); return; }
+    try {
+      localStorage.setItem('park.byok.key', k);
+      localStorage.setItem('park.byok.provider', document.getElementById('provider').value);
+    } catch (e) {}
+    Park.toast('已保存到本地 · 密钥不会上传');
+  });
+})();
+</script>
+<footer>
+  <div class="wrap">
+    <p><b>Park</b> · Park 数字公共物品商店 · 设计文档见 <a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden">MushroomDAO/Park-PublicGoodsGarden</a></p>
+    <p style="margin-top:9px;color:var(--faint)">下载不限量（边际成本≈0）· 算力按量计费（边际成本&gt;0）· BYOK 让终身免费成立 · 不设 DRM，因为内容本就开源。</p>
+  </div>
+</footer>
+<div id="toast"></div>
+</body>
+</html>

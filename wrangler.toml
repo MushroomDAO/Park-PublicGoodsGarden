@@ -1,0 +1,6 @@
+name = "park-mushroom"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "site"
+
+# Custom domain: mushroom.cv
+# Configure in Cloudflare Pages dashboard → Custom domains → Add domain
