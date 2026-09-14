@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>公共物品索引 · Park</title>
+<meta name="description" content="Park 数字公共物品商店的全部物品索引，按分类筛选。全部 Apache 2.0 开源，会员可无限下载。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/park.css">
+</head>
+<body>
+<header>
+  <div class="wrap hrow">
+    <a class="logo" href="index.html">🌱 Park</a>
+    <nav class="nav">
+      <a href="index.html">首页</a>
+      <a href="public-goods.html">公共物品</a>
+      <a href="store.html">商店</a>
+      <a href="membership.html">会员与凭证</a>
+    </nav>
+    <div class="spacer"></div>
+    <span class="badge" id="badge"><span class="dot"></span><span id="badgeText">非会员</span></span>
+  </div>
+</header>
+<div class="wrap hero" style="padding-bottom:28px">
+  <span class="kicker">Index · 12 件</span>
+  <h1 style="font-size:clamp(26px,4vw,40px)">全部数字公共物品</h1>
+  <p class="lead">每一件都是 Apache 2.0。你可以直接从 GitHub 取源码自行构建；会员的意义是拿到<b>验证过的构建、一键更新和网络接入</b>。</p>
+  <div class="frow" id="catRow" style="margin-top:24px"></div>
+</div>
+
+<section style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="shead"><h2 id="listTitle">全部</h2><span class="pill" id="storePill">全部锁定</span></div>
+    <div class="grid" id="goodsGrid"></div>
+  </div>
+</section>
+
+<script src="assets/goods-data.js"></script>
+<script src="assets/park.js"></script>
+<script>
+(function () {
+  var G = window.PARK_GOODS, member = Park.isMember(), cat = '全部';
+
+  document.getElementById('storePill').textContent = member ? '已解锁 · 无限下载' : '锁定中';
+  document.getElementById('storePill').className = member ? 'pill' : 'pill lock';
+
+  var row = document.getElementById('catRow');
+  window.PARK_CATS.forEach(function (c) {
+    var b = document.createElement('button');
+    b.className = 'btn sm' + (c === cat ? ' primary' : '');
+    b.textContent = c;
+    b.addEventListener('click', function () { cat = c; paint(); });
+    row.appendChild(b);
+  });
+
+  function paint() {
+    Array.prototype.forEach.call(row.children, function (b) {
+      b.className = 'btn sm' + (b.textContent === cat ? ' primary' : '');
+    });
+    document.getElementById('listTitle').textContent = cat === '全部' ? '全部' : cat;
+    var list = cat === '全部' ? G : G.filter(function (g) { return g.cat === cat; });
+    var grid = document.getElementById('goodsGrid');
+    grid.innerHTML = '';
+    list.forEach(function (g) {
+      var c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML =
+        '<div class="ico">' + g.ico + '</div>' +
+        '<h4>' + g.name + ' <span class="tagline">' + g.en + '</span></h4>' +
+        '<p>' + g.desc + '</p>' +
+        '<div class="meta"><span>' + g.cat + '</span><span>' + g.ver + '</span><span>' + g.size + '</span><span>↓ ' + g.dl + '</span></div>' +
+        '<div class="cardfoot">' +
+          (member
+            ? '<button class="btn primary sm" data-dl="' + g.name + '">下载</button>' +
+              (g.needsCompute ? '<a class="tagline" href="membership.html">可接 BYOK →</a>' : '<span class="tagline">纯本地</span>')
+            : '<span class="lockmsg">🔒 需会员</span><a class="tagline" href="store.html">去铸造 →</a>') +
+        '</div>';
+      grid.appendChild(c);
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll('[data-dl]'), function (b) {
+      b.addEventListener('click', function () {
+        Park.toast('已开始下载：' + b.getAttribute('data-dl') + '（会员免费，不计数）');
+      });
+    });
+  }
+  paint();
+})();
+</script>
+<footer>
+  <div class="wrap">
+    <p><b>Park</b> · Park 数字公共物品商店 · 设计文档见 <a href="https://github.com/MushroomDAO/Park-PublicGoodsGarden">MushroomDAO/Park-PublicGoodsGarden</a></p>
+    <p style="margin-top:9px;color:var(--faint)">下载不限量（边际成本≈0）· 算力按量计费（边际成本&gt;0）· BYOK 让终身免费成立 · 不设 DRM，因为内容本就开源。</p>
+  </div>
+</footer>
+<div id="toast"></div>
+</body>
+</html>

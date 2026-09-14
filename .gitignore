@@ -137,3 +137,9 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local Cloudflare Pages deploy tooling
+# (kept inside the repo so the sandboxed toolchain can write its caches)
+.tmp-*/
+.tmp-*
+.wrangler/
