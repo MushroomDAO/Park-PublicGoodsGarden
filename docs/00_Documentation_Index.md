@@ -10,6 +10,7 @@ Welcome to the **Public Goods Garden (Park)** documentation. This system outline
 *   **[02. Ecosystem Model](02_Ecosystem_Model.md)**: The "Three Layers" (Infra, Protocol, App) and Value Exchange Matrix.
 *   **[05. Mechanism Design](05_Mechanism_Design.md)**: Hard rules for GT (Service Coupon), Vault (Regulation), and `park.json`.
 *   **[06. Technical Architecture](06_Technical_Architecture.md)**: Tech stack specs (Paymaster, MySBT, Validators).
+*   **[10. Ticket & Credential Design](10_Ticket_Credential_Design.md)**: How the Ticket gates access to Park service networks — device-bound seats, DPoP tokens, revocation, and why we do **not** ship DRM.
 
 ## 🚀 Execution & Operations
 *   **[03. Lifecycle Workflows](03_Lifecycle_Workflows.md)**: User/Creator journeys, "First 100" algorithm, and Dispute flows.

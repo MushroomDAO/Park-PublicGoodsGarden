@@ -9,13 +9,13 @@
 *   **To-Do**:
     *   [ ] Deploy `ParkID` SBT contract (ERC-721/1155).
     *   [ ] Implement "Reputation Score" oracle to feed on-chain/off-chain activity data.
-    *   [ ] Build "Gatekeeper" middleware to verify SBT before API calls.
+    *   [ ] Build "Gatekeeper" middleware to verify SBT before API calls. **(spec: [10. Ticket & Credential Design](10_Ticket_Credential_Design.md) §4.4)**
 
 ### 2. Billing & Paymaster (Gasless Gateway)
 *   **Definition**: The "Box Office" that handles fiat/crypto conversion and Ticket burning.
 *   **To-Do**:
     *   [ ] Integrate **Paymaster** (ERC-4337) to allow users to pay via stablecoins (USDC) or fiat (Stripe/Alipay), with backend automatically handling the Swap -> Stake -> Burn flow.
-    *   [ ] Implement `verifySBT()` SDK function for Builders to check user status.
+    *   [ ] Implement `verifySBT()` SDK function for Builders to check user status. **(seat model: [10. Ticket & Credential Design](10_Ticket_Credential_Design.md) §3)**
     *   [ ] Implement `chargeUser()` SDK function for incremental service fees.
 
 ### 3. The Vault (Regulation Hub)
