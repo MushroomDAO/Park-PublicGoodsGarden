@@ -143,3 +143,5 @@ vite.config.ts.timestamp-*
 .tmp-*/
 .tmp-*
 .wrangler/
+# Written by the deploy step so a live URL can be verified against an exact commit
+site/build-stamp.txt
